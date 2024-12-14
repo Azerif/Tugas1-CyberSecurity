@@ -5,48 +5,55 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body, html {
+            height: 100%;
+        }
+    </style>
 </head>
 <body>
-    <div class="container mt-5">
-        <h1 class="text-center mb-4">Login</h1>
+    <div class="d-flex justify-content-center align-items-center vh-100">
+        <div class="container">
+            <h1 class="text-center mb-4">Login</h1>
 
-         <!-- Flash messages -->
-         {% with messages = get_flashed_messages() %}
-         {% if messages %}
-         <div class="form-row">
-             <div class="form-group col-md-6 offset-md-3">
-                 <div class="alert alert-danger">
-                     <ul class="mb-0">
-                         {% for message in messages %}
-                             <li>{{ message }}</li>
-                         {% endfor %}
-                     </ul>
-                 </div>
-             </div>
-         </div>
-         {% endif %}
-         {% endwith %}
-         
-        <!-- Login Form -->
-        <form method="POST" action="/login">
+            <!-- Flash messages -->
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
             <div class="form-row">
                 <div class="form-group col-md-6 offset-md-3">
-                    <input type="text" id="username" name="username" placeholder="Username" class="form-control" required>
+                    <div class="alert alert-danger">
+                        <ul class="mb-0">
+                            {% for message in messages %}
+                                <li>{{ message }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
                 </div>
             </div>
-            <div class="form-row">
-                <div class="form-group col-md-6 offset-md-3">
-                    <input type="password" id="password" name="password" placeholder="Password" class="form-control" required>
+            {% endif %}
+            {% endwith %}
+            
+            <!-- Login Form -->
+            <form method="POST" action="/login">
+                <div class="form-row">
+                    <div class="form-group col-md-6 offset-md-3">
+                        <input type="text" id="username" name="username" placeholder="Username" class="form-control" required>
+                    </div>
                 </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group col-md-6 offset-md-3">
-                    <button type="submit" class="btn btn-primary btn-block">Login</button>
+                <div class="form-row">
+                    <div class="form-group col-md-6 offset-md-3">
+                        <input type="password" id="password" name="password" placeholder="Password" class="form-control" required>
+                    </div>
                 </div>
-            </div>
-        </form>
+                <div class="form-row">
+                    <div class="form-group col-md-6 offset-md-3">
+                        <button type="submit" class="btn btn-primary btn-block">Login</button>
+                    </div>
+                </div>
+            </form>
 
-        <p class="text-center mt-3">Don't have an account? <a href="/register">Register here</a></p>
+            <p class="text-center mt-3">Don't have an account? <a href="/register">Register here</a></p>
+        </div>
     </div>
 
     <!-- Optional Bootstrap JS and Popper.js -->
