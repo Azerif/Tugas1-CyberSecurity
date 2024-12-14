@@ -26,12 +26,12 @@ Ikuti langkah-langkah di bawah ini untuk menginstal dan menjalankan proyek ini s
 
 2. **Buat virtual environment**:
    ```bash
-   python3 -m venv .venv
+   python -m venv .venv
    ```
 
 3. **Aktifkan virtual environment**:
    ```bash
-   source .venv/bin/activate
+   source .venv/scripts/activate
    ```
 
 4. **Instal dependensi**:
