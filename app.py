@@ -5,7 +5,7 @@ import bleach
 import sqlite3
 import bcrypt
 import secrets
-import re  # ------ NO 1 ------
+import re  # ------ NO 3 ------
 
 
 app = Flask(__name__)
@@ -90,7 +90,7 @@ def logout():
     session.pop('user_id', None)  # Remove user from session
     flash('Logged out successfully', 'success')
     return redirect(url_for('index'))
-# # ------ NO 1 ------
+# # ------ NO 3 ------
 # def validate_input(name, age, grade):
 #     if not name or not name.strip():
 #         return False, "Name cannot be empty or whitespace"
@@ -123,7 +123,7 @@ def add_student():
     name = request.form['name']
     age = request.form['age']
     grade = request.form['grade']
-    # # ------ NO 1 ------
+    # # ------ NO 3 ------
     # is_valid, error_message = validate_input(name, age, grade)
     # if not is_valid:
     #         return error_message, 400
@@ -142,7 +142,7 @@ def add_student():
     # cursor.execute(query)
     # connection.commit()
     # connection.close()
-    # # ------ NO 1 ------
+    # # ------ NO 3 ------
     # new_student = Student(name=name, age=int(age), grade=grade)
     # db.session.add(new_student)
     # db.session.commit()
@@ -166,7 +166,7 @@ def add_student():
 
 @app.route('/delete/<string:id>')
 def delete_student(id):
-    # # ------ NO 1 ------
+    # # ------ NO 3 ------
     # student = Student.query.get_or_404(id)
     # db.session.delete(student)
     # RAW Query
@@ -182,7 +182,7 @@ def edit_student(id):
         age = request.form['age']
         grade = request.form['grade']
 
-        # # ------ NO 1 ------
+        # # ------ NO 3 ------
         # is_valid, error_message = validate_input(name, age, grade)
         # if not is_valid:
         #       return error_message, 400
@@ -190,7 +190,7 @@ def edit_student(id):
         # RAW Query
         db.session.execute(text(
             f"UPDATE student SET name='{name}', age={age}, grade='{grade}' WHERE id={id}"))
-        # # ------ NO 1 ------
+        # # ------ NO 3 ------
         # student.name = name
         # student.age = int(age)
         # student.grade = grade
