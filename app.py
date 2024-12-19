@@ -15,8 +15,6 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 # User model for authentication
-
-
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(100), nullable=False, unique=True)
@@ -24,7 +22,6 @@ class User(db.Model):
 
     def __repr__(self):
         return f'<User {self.username}>'
-
 
 class Student(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -34,8 +31,6 @@ class Student(db.Model):
 
     def __repr__(self):
         return f'<Student {self.name}>'
-
-# Route to handle login
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -55,9 +50,6 @@ def login():
         else:
             flash('Invalid username or password', 'danger')
     return render_template('login.html')
-
-# Route to handle registration
-
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
