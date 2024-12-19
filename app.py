@@ -39,7 +39,6 @@ def login():
         username = request.form['username']
         password = request.form['password']
 
-        # Find user in the database
         user = User.query.filter_by(username=username).first()
 
         # Check if user exists and password matches
@@ -56,16 +55,16 @@ def login():
 def register():
     if request.method == 'POST':
         username = request.form['username']
+        # ------ NO 2 ------
+        username = bleach.clean(request.form['username'])  
         password = request.form['password']
         hashed_password = bcrypt.hashpw(
             password.encode('utf-8'), bcrypt.gensalt())
 
-        # Check if the username already exists
         if User.query.filter_by(username=username).first():
             flash('Username already taken', 'danger')
             return redirect(url_for('register'))
 
-        # Create a new user and add to the database
         new_user = User(username=username,
                         password=hashed_password.decode('utf-8'))
         db.session.add(new_user)
@@ -81,22 +80,27 @@ def logout():
     session.pop('user_id', None)  # Remove user from session
     flash('Logged out successfully', 'success')
     return redirect(url_for('index'))
+
 # # ------ NO 3 ------
-# def validate_input(name, age, grade):
-#     if not name or not name.strip():
-#         return False, "Name cannot be empty or whitespace"
+def validate_input(name, age, grade):
+    if not name or not name.strip():
+        return False, "Name cannot be empty or whitespace"
 
-#     if re.search(r"['\";=%]+", name):
-#         return False, "Name contains invalid characters"
+    if re.search(r"['\";=%]+", name):
+        return False, "Name contains invalid characters"
 
-#     if not age.isdigit() or int(age) < 1 or int(age) > 120:
-#         return False, "Age must be a valid number between 1 and 120"
+    try:
+        age = int(age) 
+        if age < 1 or age > 120:
+            return False, "Age must be a valid number between 1 and 120"
+    except ValueError:
+        return False, "Age must be a valid number"
 
-#     valid_grades = ['A', 'B', 'C', 'D', 'E', 'F']
-#     if grade not in valid_grades:
-#         return False, f"Grade must be one of {','.join(valid_grades)}"
+    valid_grades = ['A', 'B', 'C', 'D', 'E', 'F']
+    if grade not in valid_grades:
+        return False, f"Grade must be one of {','.join(valid_grades)}"
 
-#     return True, None
+    return True, None
 
 
 @app.route('/')
@@ -111,13 +115,19 @@ def index():
 
 @app.route('/add', methods=['POST'])
 def add_student():
-    name = request.form['name']
-    age = request.form['age']
-    grade = request.form['grade']
+    # name = request.form['name']
+    # age = request.form['age']
+    # grade = request.form['grade']
+
+    # ------ NO 2 ------
+    name = bleach.clean(request.form['name'])
+    age = int(request.form['age'])
+    grade = bleach.clean(request.form['grade'])
+
     # # ------ NO 3 ------
-    # is_valid, error_message = validate_input(name, age, grade)
-    # if not is_valid:
-    #         return error_message, 400
+    is_valid, error_message = validate_input(name, age, grade)
+    if not is_valid:
+            return error_message, 400
 
     connection = sqlite3.connect('instance/students.db')
     cursor = connection.cursor()
@@ -129,70 +139,63 @@ def add_student():
     # )
     # db.session.commit()
 
-    query = f"INSERT INTO student (name, age, grade) VALUES ('{name}', {age}, '{grade}')"
-    cursor.execute(query)
-    connection.commit()
-    connection.close()
+    # query = f"INSERT INTO student (name, age, grade) VALUES ('{name}', {age}, '{grade}')"
+    # cursor.execute(query)
+    # connection.commit()
+    # connection.close()
     # # ------ NO 3 ------
-    # new_student = Student(name=name, age=int(age), grade=grade)
-    # db.session.add(new_student)
-    # db.session.commit()
+    new_student = Student(name=name, age=int(age), grade=grade)
+    db.session.add(new_student)
+    db.session.commit()
     return redirect(url_for('index'))
-
-    # """
-    # no 2
-    # sanitizing menggunakan library bleach, membersihkan input menggunakan bleach.clean
-    # Fungsi ini menghapus elemen atau atribut HTML berbahaya, seperti <script> atau atribut event (onclick, dll.).
-
-    # """
-    # name = bleach.clean(request.form['name'])
-    # age = int(request.form['age'])
-    # grade = bleach.clean(request.form['grade'])
-
-    # new_student = Student(name=name, age=age, grade=grade)
-    # db.session.add(new_student)
-    # db.session.commit()
-    # return redirect(url_for('index'))
 
 
 @app.route('/delete/<string:id>')
 def delete_student(id):
     # # ------ NO 3 ------
-    # student = Student.query.get_or_404(id)
-    # db.session.delete(student)
-    # RAW Query
-    db.session.execute(text(f"DELETE FROM student WHERE id={id}"))
+    student = Student.query.get_or_404(id)
+    db.session.delete(student)
+    # # RAW Query
+    # db.session.execute(text(f"DELETE FROM student WHERE id={id}"))
     db.session.commit()
     return redirect(url_for('index'))
 
 
 @app.route('/edit/<int:id>', methods=['GET', 'POST'])
 def edit_student(id):
+    # ------ NO 3 ------
+    student = Student.query.get_or_404(id)
     if request.method == 'POST':
-        name = request.form['name']
+        # ------ NO 2 ------
+        name = bleach.clean(request.form['name'])  
         age = request.form['age']
-        grade = request.form['grade']
+        grade = bleach.clean(request.form['grade']) 
+
+        # name = request.form['name']
+        # age = request.form['age']
+        # grade = request.form['grade']
+
 
         # # ------ NO 3 ------
-        # is_valid, error_message = validate_input(name, age, grade)
-        # if not is_valid:
-        #       return error_message, 400
+        is_valid, error_message = validate_input(name, age, grade)
+        if not is_valid:
+              return error_message, 400
 
-        # RAW Query
-        db.session.execute(text(
-            f"UPDATE student SET name='{name}', age={age}, grade='{grade}' WHERE id={id}"))
+        # # RAW Query
+        # db.session.execute(text(
+        #     f"UPDATE student SET name='{name}', age={age}, grade='{grade}' WHERE id={id}"))
         # # ------ NO 3 ------
-        # student.name = name
-        # student.age = int(age)
-        # student.grade = grade
+        student.name = name
+        student.age = int(age)
+        student.grade = grade
 
         db.session.commit()
         return redirect(url_for('index'))
-    else:
-        # RAW Query
-        student = db.session.execute(
-            text(f"SELECT * FROM student WHERE id={id}")).fetchone()
-        return render_template('edit.html', student=student)
+    # else:
+    #     # # RAW Query
+    #     # student = db.session.execute(
+    #     #     text(f"SELECT * FROM student WHERE id={id}")).fetchone()
+    return render_template('edit.html', student=student)
 
 
 # if __name__ == '__main__':
