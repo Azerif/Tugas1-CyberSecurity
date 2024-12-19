@@ -85,7 +85,7 @@ def register():
 # Route to handle logout
 
 
-@app.route('/logout')
+@app.route('/logout', methods=['POST'])
 def logout():
     session.pop('user_id', None)  # Remove user from session
     flash('Logged out successfully', 'success')
