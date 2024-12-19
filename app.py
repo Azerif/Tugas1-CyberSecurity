@@ -138,15 +138,15 @@ def add_student():
     # )
     # db.session.commit()
 
-    # query = f"INSERT INTO student (name, age, grade) VALUES ('{name}', {age}, '{grade}')"
-    # cursor.execute(query)
-    # connection.commit()
-    # connection.close()
+    query = f"INSERT INTO student (name, age, grade) VALUES ('{name}', {age}, '{grade}')"
+    cursor.execute(query)
+    connection.commit()
+    connection.close()
     # # ------ NO 3 ------
     # new_student = Student(name=name, age=int(age), grade=grade)
     # db.session.add(new_student)
     # db.session.commit()
-    # return redirect(url_for('index'))
+    return redirect(url_for('index'))
 
     # """
     # no 2
