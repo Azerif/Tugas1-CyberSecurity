@@ -9,12 +9,12 @@ import re  # ------ NO 3 ------
 
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = secrets.token_hex(16)
+app.config['SECRET_KEY'] = secrets.token_hex(16) # ------ NO 1 ------
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///students.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
-# User model for authentication
+# ------ NO 1 ------
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(100), nullable=False, unique=True)
@@ -32,7 +32,7 @@ class Student(db.Model):
     def __repr__(self):
         return f'<Student {self.name}>'
 
-
+# ------ NO 1 ------
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -51,6 +51,7 @@ def login():
             flash('Invalid username or password', 'danger')
     return render_template('login.html')
 
+# ------ NO 1 ------
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
@@ -74,9 +75,7 @@ def register():
 
     return render_template('register.html')
 
-# Route to handle logout
-
-
+# ------ NO 1 ------
 @app.route('/logout', methods=['POST'])
 def logout():
     session.pop('user_id', None)  # Remove user from session
