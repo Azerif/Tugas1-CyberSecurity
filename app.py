@@ -1,10 +1,10 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import text
-import bleach
+import bleach  # ------ NO 2 ------
 import sqlite3
-import bcrypt
-import secrets
+import bcrypt  # ------ NO 1 ------
+import secrets # ------ NO 1 ------
 import re  # ------ NO 3 ------
 
 
@@ -50,29 +50,29 @@ def login():
             flash('Invalid username or password', 'danger')
     return render_template('login.html')
 
-# ------ NO 1 ------
-@app.route('/register', methods=['GET', 'POST'])
-def register():
-    if request.method == 'POST':
-        username = request.form['username']
-        # ------ NO 2 ------
-        username = bleach.clean(request.form['username'])  
-        password = request.form['password']
-        hashed_password = bcrypt.hashpw(
-            password.encode('utf-8'), bcrypt.gensalt())
+# # kode pembantu (bukan untuk meningkatkan keamanan)
+# @app.route('/register', methods=['GET', 'POST'])
+# def register():
+#     if request.method == 'POST':
+#         username = request.form['username']
+#         
+#         username = bleach.clean(request.form['username'])  
+#         password = request.form['password']
+#         hashed_password = bcrypt.hashpw(
+#             password.encode('utf-8'), bcrypt.gensalt())
 
-        if User.query.filter_by(username=username).first():
-            flash('Username already taken', 'danger')
-            return redirect(url_for('register'))
+#         if User.query.filter_by(username=username).first():
+#             flash('Username already taken', 'danger')
+#             return redirect(url_for('register'))
 
-        new_user = User(username=username,
-                        password=hashed_password.decode('utf-8'))
-        db.session.add(new_user)
-        db.session.commit()
-        flash('Registration successful! You can now log in.', 'success')
-        return redirect(url_for('login'))
+#         new_user = User(username=username,
+#                         password=hashed_password.decode('utf-8'))
+#         db.session.add(new_user)
+#         db.session.commit()
+#         flash('Registration successful! You can now log in.', 'success')
+#         return redirect(url_for('login'))
 
-    return render_template('register.html')
+#     return render_template('register.html')
 
 # ------ NO 1 ------
 @app.route('/logout', methods=['POST'])
