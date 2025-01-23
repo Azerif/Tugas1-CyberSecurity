@@ -36,7 +36,7 @@ Ikuti langkah-langkah di bawah ini untuk menginstal dan menjalankan proyek ini s
 
 4. **Instal dependensi**:
    ```bash
-   pip install flask flask_sqlalchemy
+   pip install -r requirements. txt   
    ```
 
 5. **Jalankan aplikasi**:
